@@ -8,5 +8,6 @@ class ClientListView(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
 
-
-
+class EventListView(viewsets.ModelViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer

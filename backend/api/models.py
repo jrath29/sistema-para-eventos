@@ -7,12 +7,11 @@ class Client(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=20)
 
-class Person(models.Model):
+class Event(models.Model):
     name = models.CharField()
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
+    date = models.DateField()
+    address = models.CharField()
 
-class (models.Model):
-    name = models.CharField()
-    email = models.EmailField()
-    phone = models.CharField(max_length=20)
+class Enrollment(models.Model):
+    person = models.ForeignKey(Client, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
