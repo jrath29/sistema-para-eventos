@@ -45,8 +45,11 @@ const Clients = () => {
         try {
             const res = await api.get(`/enrollments/?client_id=${client.id}`);
             setClientEnrollments(res.data);
+            // console.log("Inscrições carregadas para o cliente", client.name, ":", res.data); // REMOVER ESTA LINHA
         } catch (error) {
             toast.error("Erro ao carregar inscrições do cliente.");
+            setClientEnrollments([]); // Garante que seja uma array vazia em caso de erro para não travar a UI
+            // console.error("Erro ao buscar inscrições:", error); // REMOVER ESTA LINHA
         }
 
         const modal = new window.bootstrap.Modal(document.getElementById('myModal'));
@@ -54,7 +57,12 @@ const Clients = () => {
     };
 
     const isAlreadyEnrolled = (eventId) => {
-        return clientEnrollments.some(enrollment => enrollment.event.id === eventId);
+        const enrolled = clientEnrollments.some(enrollment => {
+            // console.log(`Verificando inscrição para Evento ID: ${eventId}. Comparando com Inscrição.event.id: ${enrollment.event ? enrollment.event.id : 'N/A (evento não encontrado na inscrição)'}`); // REMOVER ESTA LINHA
+            return enrollment.event && enrollment.event.id === eventId;
+        });
+        // console.log(`Cliente já inscrito no evento ${eventId} : ${enrolled}`); // REMOVER ESTA LINHA
+        return enrolled;
     };
 
     useEffect(() => {
@@ -87,9 +95,24 @@ const Clients = () => {
         try {
             await api.post('/enrollments/', enrollmentData)
             toast.success("Cliente inscrito com sucesso!", {hideProgressBar: true})
-            setTimeout(() => window.location.reload(), 1800);
+            // Após a inscrição bem-sucedida, atualize as inscrições do cliente para que o botão seja desabilitado
+            const res = await api.get(`/enrollments/?client_id=${selectedClient.id}`);
+            setClientEnrollments(res.data);
+            // Opcional: Fechar o modal após a inscrição bem-sucedida
+            const modal = window.bootstrap.Modal.getInstance(document.getElementById('myModal'));
+            if (modal) {
+                modal.hide();
+            }
+
         } catch (error) {
-            toast.error("Não foi possível executar a ação!")
+            if (error.response && error.response.data && error.response.data.non_field_errors) {
+                toast.error(error.response.data.non_field_errors[0]);
+            } else if (error.response && error.response.data && typeof error.response.data === 'object') {
+                const errorMessages = Object.values(error.response.data).flat();
+                toast.error(errorMessages.join(' '));
+            } else {
+                toast.error("Não foi possível executar a ação!");
+            }
         }
     }
 
@@ -117,7 +140,8 @@ const Clients = () => {
                             <td>{client.email}</td>
                             <td>{client.phone}</td>
                             <td className='text-center'>
-                                <button className='btn btn-primary btn-sm'
+                                <button
+                                    className='btn btn-primary btn-sm'
                                     onClick={() => handleOpenModal(client)}
                                     title='Inscrever'>
                                     <FaPlus/>
@@ -146,7 +170,7 @@ const Clients = () => {
                         <div className="modal-body">
                             <p className='text-center'>Escolha o evento para inscrever este participante.</p>
 
-                            <table class="table">
+                            <table className="table">
                                 <thead>
                                     <tr>
                                         <th className='text-center'>Evento</th>
@@ -159,14 +183,19 @@ const Clients = () => {
                                         <tr key={event.id} className='text-center'>
                                             <td>{event.name}</td>
                                             <td>{new Date(event.date).toLocaleString('pt-BR', {
-                                            day: '2-digit',
-                                            month: '2-digit',
-                                            year: 'numeric',
-                                            hour: '2-digit',
-                                            minute: '2-digit'
-                                            }).replace(',', '')}</td>
+                                                day: '2-digit',
+                                                month: '2-digit',
+                                                year: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                                }).replace(',', '')}</td>
                                             <td>
-                                                <button className='btn btn-primary btn-sm' title='Realizar Inscrição' onClick={() => submitEnrollment(event.id)}>
+                                                <button
+                                                    className='btn btn-primary btn-sm'
+                                                    title={isAlreadyEnrolled(event.id) ? 'Já inscrito' : 'Realizar Inscrição'}
+                                                    onClick={() => submitEnrollment(event.id)}
+                                                    disabled={isAlreadyEnrolled(event.id)}
+                                                >
                                                     <FaPlus/>
                                                 </button>
                                             </td>
@@ -185,4 +214,4 @@ const Clients = () => {
     )
 }
 
-export default Clients
+export default Clients;
