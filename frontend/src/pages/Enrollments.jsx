@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Layout from '../components/Layout'
 import api from '../services/api'
 import { FaTrash } from "react-icons/fa";
+import { toast } from 'react-toastify';
 
 const Enrollments = () => {
 
