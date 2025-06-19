@@ -59,7 +59,7 @@ const FormEvent = () => {
 
                 <div className="input-group mb-3">
                     <span className="input-group-text">Datra:</span>
-                    <input name="date" type="date" className="form-control" ref={inputDate} required />
+                    <input name="date" type="datetime-local" className="form-control" ref={inputDate} required />
                 </div>
 
                 <div className="input-group mb-3">

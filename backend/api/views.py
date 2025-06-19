@@ -11,3 +11,7 @@ class ClientListView(viewsets.ModelViewSet):
 class EventListView(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
+
+class EnrollmentListView(viewsets.ModelViewSet):
+    queryset = Enrollment.objects.all()
+    serializer_class = EnrollmentSerializer

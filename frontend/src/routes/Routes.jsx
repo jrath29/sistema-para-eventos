@@ -4,6 +4,7 @@ import Clients from '../pages/Clients'
 import Events from '../pages/Events'
 import FormClient from '../components/FormClient'
 import FormEvent from '../components/FormEvent'
+import Enrollments from '../pages/Enrollments'
 
 const AppRoutes = () => (
     <BrowserRouter>
@@ -15,6 +16,7 @@ const AppRoutes = () => (
             <Route exact path='/clients' element={<Clients/>}/>
             <Route exact path='/client/create' element={<FormClient/>}/>
             <Route exact path='/client/:id' element={<FormClient/>}/>
+            <Route exact path='/enrollments' element={<Enrollments/>}/>
         </Routes>
     </BrowserRouter>
 )

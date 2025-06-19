@@ -9,9 +9,10 @@ class Client(models.Model):
 
 class Event(models.Model):
     name = models.CharField()
-    date = models.DateField()
+    date = models.DateTimeField()
     address = models.CharField()
 
+
 class Enrollment(models.Model):
-    person = models.ForeignKey(Client, on_delete=models.CASCADE)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)

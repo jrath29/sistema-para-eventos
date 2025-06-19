@@ -4,6 +4,7 @@ import Layout from '../components/Layout'
 import { FaPencil } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const Clients = () => {
 
@@ -15,8 +16,13 @@ const Clients = () => {
     };
 
     const deleteClient = async (id) => {
-        await api.delete(`/clients/${id}/`);
-        getClients();
+        try{
+            await api.delete(`/clients/${id}/`);
+            toast.success("Cliente deletado com sucesso!")
+            getClients();
+        } catch(error){
+            toast.error("Não foi possível executar essa ação!")
+        }
     };
 
     useEffect(() => {
@@ -28,7 +34,8 @@ const Clients = () => {
             <div className='d-flex justify-content-end'>
                 <a href='/client/create' className='btn btn-success'>Cadastrar Cliente</a>
             </div>
-            <h1 className="text-center mb-3">Clientes</h1> <hr/>
+            <h1 className="text-center mb-3">Clientes</h1>
+            <p className='text-center'>Cadastre e gerencie os participantes dos eventos.</p> <hr/>
 
             <table className="table table-striped">
                 <thead>
@@ -46,10 +53,10 @@ const Clients = () => {
                             <td>{client.email}</td>
                             <td>{client.phone}</td>
                             <td className="text-center">
-                                <Link to={`/client/${client.id}`} className="btn btn-warning btn-sm">
+                                <Link to={`/client/${client.id}`} className="btn btn-warning btn-sm" title='Editar Cliente'>
                                     <FaPencil/>
                                 </Link>&nbsp;
-                                <button className="btn btn-danger btn-sm" onClick={() => deleteClient(client.id)}>
+                                <button className="btn btn-danger btn-sm" onClick={() => deleteClient(client.id)} title='Deletar Cliente'>
                                     <FaTrash/>
                                 </button>
                             </td>

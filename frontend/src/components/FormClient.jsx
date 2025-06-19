@@ -2,6 +2,7 @@ import { useRef, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import api from '../services/api'
 import Layout from '../components/Layout'
+import { toast } from 'react-toastify'
 
 const FormClient = () => {
   const inputName = useRef()
@@ -42,11 +43,10 @@ const FormClient = () => {
       } else {
         await api.post('/clients/', clientData)
       }
-      navigate('/clients')
-
+      toast.success("Cliente salvo com sucesso!", {hideProgressBar: true})
+      setTimeout(() => navigate('/clients'), 1800) 
     } catch (error) {
-      console.error("Erro ao salvar cliente:", error)
-      alert("Erro ao salvar cliente. Veja o console.")
+      toast.error("Não foi possível executar a ação!")
     }
   }
 
