@@ -44,7 +44,7 @@ const FormClient = () => {
         await api.post('/clients/', clientData)
       }
       toast.success("Cliente salvo com sucesso!", {hideProgressBar: true})
-      setTimeout(() => navigate('/clients'), 1800) 
+      setTimeout(() => navigate('/clients'), 1800)
     } catch (error) {
       toast.error("Não foi possível executar a ação!")
     }

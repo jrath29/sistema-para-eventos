@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import api from '../services/api';
 import Layout from '../components/Layout'
-import { FaPencil } from "react-icons/fa6";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash,FaPencilAlt } from "react-icons/fa";
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
@@ -60,7 +59,7 @@ const Events = () => {
                             <td>{event.address}</td>
                             <td className="text-center">
                                 <Link to={`/event/${event.id}`} className="btn btn-warning btn-sm" title='Editar Evento'>
-                                    <FaPencil/>
+                                    <FaPencilAlt/>
                                 </Link>&nbsp;
                                 <button className="btn btn-danger btn-sm" onClick={() => deleteEvent(event.id)} title='Deletar Evento'>
                                     <FaTrash/>

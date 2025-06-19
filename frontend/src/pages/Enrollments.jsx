@@ -13,8 +13,13 @@ const Enrollments = () => {
     };
 
     const deleteEnrollment = async (id) => {
-        await api.delete(`/enrollments/${id}/`);
-        getEnrollments();
+        try{
+            await api.delete(`/enrollments/${id}/`);
+            toast.success("Inscrição desfeita com sucesso!")
+            getEnrollments();
+        } catch(error){
+            toast.error("Não foi possível executar a ação!")
+        }
     };
 
     useEffect(() => {
@@ -29,17 +34,17 @@ const Enrollments = () => {
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>Nome</th>
-                        <th>Evento</th>
+                        <th className='text-center'>Nome</th>
+                        <th className='text-center'>Evento</th>
                         <th className='text-center'>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {enrollments.map(enrollment => (
                         <tr key={enrollment.id}>
-                            <td>{enrollment.client}</td>
-                            <td>{enrollment.event}</td>
-                            <td>
+                            <td className='text-center'>{enrollment.client.name}</td>
+                            <td className='text-center'>{enrollment.event.name}</td>
+                            <td className='text-center'>
                                 <button className='btn btn-danger btn-sm' onClick={() => deleteEnrollment(enrollment.id)} title='Desfazer Inscrição'>
                                     <FaTrash/>
                                 </button>
